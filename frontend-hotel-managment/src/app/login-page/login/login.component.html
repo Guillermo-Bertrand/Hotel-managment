@@ -1,0 +1,48 @@
+<div
+  class="bg-image container-fluid"
+  style="
+    background-image: url('../../assets/Images/alberca.jpg');
+    background-size: cover;
+  "
+>
+  <div class="d-flex align-items-center" style="height: 100vh">
+    <div
+      class="container-fluid border rounded"
+      style="background-color: white; width: 40vh; height: 60vh"
+    >
+      <h3 class="text-center mt-5 mb-0">Iniciar Sesión</h3>
+      <div class="container-fluid d-flex align-items-center" style="height: 50vh;">
+        <form class="mx-auto" #loginform="ngForm">
+          
+          <div class="mb-3" >
+            <label class="form-label">Email</label>
+            <input [(ngModel)]="user.email" type="email" name="email" class="form-control"  style="width: 30vh;" required #emailTxt="ngModel">
+            <div class="alert alert-danger" *ngIf="emailTxt.invalid && (emailTxt.dirty || emailTxt.touched)">
+              <div *ngIf="emailTxt.errors['required']" style="font-size: small; height: 5px; padding: 0px; margin: 0;">
+                campo obligatorio
+              </div>
+            </div>
+          </div>
+  
+          <div class="mb-3">
+            <label class="form-label">Contraseña</label>
+            <input [(ngModel)]="user.password" type="password" name="password" class="form-control" required #passwordTxt="ngModel">
+            <div class="alert alert-danger" *ngIf="passwordTxt.invalid && (passwordTxt.dirty || passwordTxt.touched)">
+              <div *ngIf="passwordTxt.errors['required']" style="font-size: small; height: 5px; padding: 0px; margin: 0;">
+                campo obligatorio
+              </div>
+            </div>
+          </div>
+  
+          <button [disabled]="!loginform.form.valid" (click)="login()" type="submit" class="btn btn-primary mx-auto d-block">Entrar</button>
+          
+          <footer class="footer mt-auto py-3">
+            <a class="btn btn-link mx-auto d-block" routerLink="/password-recovery">Olvidé mi contraseña</a>
+          </footer>
+        </form>
+      </div>
+      
+
+    </div>
+  </div>
+</div>

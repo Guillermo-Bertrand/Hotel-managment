@@ -1,0 +1,32 @@
+.styled-container{
+  width: 70%;
+  border-radius: 10px;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  padding-top: 25px;
+  padding-bottom: 25px;
+}
+
+.card-container{
+  width: 95%;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  padding-top: 25px;
+  padding-bottom: 25px;
+}
+
+.bank-card{
+  background-color: gray;
+  border-radius: 25px;
+}
+
+.label-bank-card{
+  font-size: small;
+}
+
+.field-bank-card{
+  background-color: transparent; 
+  border: none;
+  font-size: large;
+  color: white;
+}

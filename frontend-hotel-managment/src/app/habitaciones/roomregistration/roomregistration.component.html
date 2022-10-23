@@ -1,0 +1,133 @@
+<div class="container mt-3">
+    <div class="container no-data alert alert-primary" role="alert" *ngIf="rooms?.length == 0 else elseBlock">
+        No hay ningun registro en la base de datos
+    </div>
+
+    <ng-template #elseBlock>
+        <div class="container table-content ">
+    
+            <table class="table table-striped border border-3">
+                <thead class="table-dark">
+                    <tr>
+                        <th>#</th>
+                        <th>Tipo de habitación</th>
+                        <th>Precio</th>
+                        <th>Descripción</th>
+                        <th>Tipo de cama</th>
+                        <th *ngIf="authService.hasRole('ROLE_ADMIN')" >Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let room of rooms">
+                        <td>{{room.idRoom}}</td>
+                        <td>{{room.roomType}}</td>
+                        <td>${{room.price}}</td>
+                        <td>{{room.description}}</td>
+                        <td>{{room.bedType.type}}</td>
+                        <td *ngIf="authService.hasRole('ROLE_ADMIN')" class="actions-container">
+                            <button type="button" class="btn btn-info" (click)="loadRoomData($event)" value="{{room.idRoom}}" data-bs-toggle="modal" data-bs-target="#updateModal" data-bs-whatever="@mdo">Editar</button>
+                            <a class="btn btn-danger action-button" (click)="deleteRoom(room)">Eliminar</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </ng-template>
+
+    <!--Modal to update existing rooms-->
+
+    <div *ngIf="auxRoom" class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModal" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="updateModalLabel">{{auxRoom.roomType}}</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+    
+              <form>
+                <div class="form-group">
+                    <label for="id" class="col-form-label">Id habitación:</label>
+                    <input type="text" class="form-control" [(ngModel)]="auxRoom.idRoom" id="id" name="id" placeholder="Escribe el id" disabled>
+                </div>
+                <div class="form-group">
+                  <label for="roomType" class="col-form-label">Tipo de habitación:</label>
+                  <select class="form-control" [(ngModel)]="selectedRoomType" id="roomType" name="roomType" required>
+                    <option *ngFor="let roomType of roomTypes">{{roomType.roomType}}</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="price" class="col-form-label">Precio:</label>
+                  <input type="text" [(ngModel)]="auxRoom.price" name="price" class="form-control" id="price" placeholder="Escribe el precio" required>
+              </div>
+              <div class="form-group">
+                <label for="bedType" class="col-form-label">Tipo de cama(s):</label>
+                <select class="form-control" [(ngModel)]="selectedBedType" id="bedType" name="bedType" required>
+                  <option *ngFor="let bedType of bedTypes">{{bedType.type}}</option>
+                </select>
+              </div>
+                <div class="form-group">
+                    <label for="description" class="col-form-label">Descripción:</label>
+                    <textarea type="text" [(ngModel)]="auxRoom.description" name="description" class="form-control" id="description" placeholder="Escribe la descripción de la habitación" required rows="3"></textarea>
+                </div>
+            </form>
+    
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+              <button type="button" class="btn btn-primary" (click)="updateRoom()">Actualizar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <!--Modal to add new rooms-->
+
+    <div class="container">
+        <div class="d-grid gap-2 col-6 mx-auto">
+            <button *ngIf="authService.hasRole('ROLE_ADMIN')" type="button" class="btn btn-info mb-3" data-bs-toggle="modal" data-bs-target="#addModal" data-bs-whatever="@mdo">Añadir habitación</button>
+        </div>
+                            
+        <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Añadir habitación</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+        
+                    <form>
+                        <div class="form-group">
+                            <label for="roomType" class="col-form-label">Tipo de habitación:</label>
+                            <select class="form-control" [(ngModel)]="selectedRoomType" id="roomType" name="roomType" required>
+                              <option *ngFor="let roomType of roomTypes">{{roomType.roomType}}</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                          <label for="price" class="col-form-label">Precio:</label>
+                          <input type="text" [(ngModel)]="newRoom.price" name="price" class="form-control" id="price" placeholder="Escribe el precio" required>
+                      </div>
+                      <div class="form-group">
+                        <label for="bedType" class="col-form-label">Tipo de cama(s):</label>
+                        <select class="form-control" [(ngModel)]="selectedBedType" id="bedType" name="bedType" required>
+                            <option *ngFor="let bedType of bedTypes">{{bedType.type}}</option>
+                        </select>
+                      </div>
+                        <div class="form-group">
+                            <label for="description" class="col-form-label">Descripción:</label>
+                            <textarea type="text" [(ngModel)]="newRoom.description" name="description" class="form-control" id="description" placeholder="Escribe la descripción de la habitación" required rows="3"></textarea>
+                        </div>
+                    </form>
+        
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                  <button type="button" (click)="addRoom()" class="btn btn-primary">Añadir</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+    </div>
+</div>

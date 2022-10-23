@@ -1,0 +1,22 @@
+.btn-resGreen {
+    color: #212529;
+    background-color: #BED73D;
+    border-color: #b2ce27;
+}
+
+.nav-item:hover{
+    color: #212529;
+    background-color: #BED73D;
+    border-radius: 5px;
+}
+
+.btn-resGreen:hover {
+    color: #212529;
+    background-color: #a9c22f;
+    border-color: #9eb820;
+}
+
+.btn-resGreen:focus,
+.btn-resGreen.focus {
+    box-shadow: 0 0 0 .2rem #9bb130;
+}

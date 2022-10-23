@@ -1,0 +1,14 @@
+.table-content{
+    margin-top: 45px;
+}
+tr, td{
+    text-align: center;
+    border: 1px solid lightgray;
+}
+.actions-container{
+    width: 200px;
+}
+.action-button{
+    margin-left: 5px;
+    margin-right: 5px;
+}

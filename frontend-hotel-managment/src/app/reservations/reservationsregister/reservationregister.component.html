@@ -1,0 +1,201 @@
+<div class="container mt-3">
+    <div class="container no-data alert alert-primary" role="alert" *ngIf="reservations?.length == 0 else elseBlock">
+        No hay ningun registro en la base de datos
+    </div>
+
+    <ng-template #elseBlock>
+        <div class="container table-content ">
+    
+            <table class="table table-striped border border-3">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Ticket</th>
+                        <th>Tipo de habitación</th>
+                        <th>Tipo de cama(s)</th>
+                        <th>Fecha ingreso</th>
+                        <th>Fecha de salida</th>
+                        <th>Método de pago</th>
+                        <th>Costo</th>
+                        <th *ngIf="authService.hasRole('ROLE_ADMIN')" >Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let reservation of reservations">
+                        <td><a (click)="loadTicket(reservation.idReservation)" class="btn btn-info">Ver</a></td>
+                        <td>{{reservation.room.roomType}}</td>
+                        <td>{{reservation.room.bedType.type}}</td>
+                        <td>{{reservation.checkIn | date: "dd/MM/yyyy" }}</td>
+                        <td>{{reservation.checkOut | date: "dd/MM/yyyy"}}</td>
+                        <td>{{reservation.paymentMethod.payment}}</td>
+                        <td>${{reservation.price}}</td>
+
+                        
+                        <td *ngIf="authService.hasRole('ROLE_ADMIN')" class="actions-container">
+                            <button type="button" class="btn btn-info" (click)="loadReservationData($event)" value="{{reservation.idReservation}}" data-bs-toggle="modal" data-bs-target="#updateModal" data-bs-whatever="@mdo">Editar</button>
+                            <a class="btn btn-danger action-button" (click)="deleteReservation(reservation)">Eliminar</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </ng-template>
+
+    <!--Modal to update existing rooms-->
+
+    <div class="container">
+                            
+        <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModal" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="updateModal">Actualizar reservación</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+        
+                    <form>
+                        <div class="form-group">
+                            <label for="roomType" class="col-form-label">Tipo de habitación:</label>
+                            <select (change)="showPrice()" class="form-control" [(ngModel)]="selectedRoomType" id="roomType" name="roomType" required>
+                              <option *ngFor="let roomType of roomTypes">{{roomType.roomType}}</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                          <label for="bedType" class="col-form-label">Tipo de cama(s):</label>
+                          <select class="form-control" [(ngModel)]="selectedBedType" id="bedType" name="bedType" required>
+                              <option *ngFor="let bedType of bedTypes">{{bedType.type}}</option>
+                          </select>
+                        </div>
+                        <div class="form-group">
+                          <label for="price" class="col-form-label">Precio de habitación:</label>
+                          <input type="text" [(ngModel)]="price" name="price" class="form-control" id="price" placeholder="Escribe el precio" disabled>
+                        </div>
+
+                        <div class="mb-3">
+                          <label class="form-label">Fecha de ingreso:</label>
+                          <input (change)="calDays()" [(ngModel)]="checkIn" name="checkIn" class="form-control" id="checkIn" type="date">
+                        </div>
+                        <div class="mb-3">
+                          <label class="form-label">Fecha de salida:</label>
+                          <input (change)="calDays()" [(ngModel)]="checkOut" name="checkOut" class="form-control" id="checkOut" type="date">
+                        </div>
+
+                        <div class="mb-3">
+                          <label class="form-label" for="email">Número de huéspedes:</label>
+                          <select [(ngModel)]="selectedGuestNumber" class="form-select" name="selectedGuestNumber" id="selectBedType" disabled>
+                              <option>1</option>
+                              <option>2</option>
+                              <option *ngIf="selectedBedType != 'King size'">3</option>
+                              <option *ngIf="selectedBedType != 'King size'">4</option>
+                          </select>
+                      </div>
+          
+                      <div *ngIf="selectedGuestNumber >= '1'" class="container my-3" style="border: 1px solid lightgray; border-radius: 10px; padding: 10px;">
+                          <h6>Huésped 1</h6>
+                          <div class="my-3">
+                              <label class="form-label">Nombre:</label>
+                              <input required #name1Txt="ngModel" [(ngModel)]="guest1.name" name="name1" class="form-control" id="name1" type="text" placeholder="Escriba el nombre del huésped">
+                              
+                              <div class="alert alert-danger" *ngIf="name1Txt.invalid && (name1Txt.dirty || name1Txt.touched)">
+                                  <div *ngIf="name1Txt.errors['required']" style="font-size: small; height: 5px; padding: 0px; margin: 0;">
+                                    campo obligatorio
+                                  </div>
+                              </div>
+          
+                              <label class="form-label mt-2">Apellido:</label>
+                              <input required #lastName1Txt="ngModel" [(ngModel)]="guest1.lastName" name="lastName1" class="form-control" id="lastName1" type="text" placeholder="Escriba el apellido del huésped">
+                         
+                              <div class="alert alert-danger" *ngIf="lastName1Txt.invalid && (lastName1Txt.dirty || lastName1Txt.touched)">
+                                  <div *ngIf="lastName1Txt.errors['required']" style="font-size: small; height: 5px; padding: 0px; margin: 0;">
+                                    campo obligatorio
+                                  </div>
+                              </div>
+                         
+                          </div>
+                      </div>
+                      <div *ngIf="selectedGuestNumber >= '2'" class="container my-3" style="border: 1px solid lightgray; border-radius: 10px; padding: 10px;">
+                          <h6>Huésped 2</h6>
+                          <div class="my-3">
+                              <label class="form-label">Nombre:</label>
+                              <input required #name2Txt="ngModel" [(ngModel)]="guest2.name" name="name2" class="form-control" type="text" placeholder="Escriba el nombre del huésped">
+                              
+                              <div class="alert alert-danger" *ngIf="name2Txt.invalid && (name2Txt.dirty || name2Txt.touched)">
+                                  <div *ngIf="name2Txt.errors['required']" style="font-size: small; height: 5px; padding: 0px; margin: 0;">
+                                    campo obligatorio
+                                  </div>
+                              </div>
+          
+                              <label class="form-label mt-2">Apellido:</label>
+                              <input required #lastName2Txt="ngModel" [(ngModel)]="guest2.lastName" name="lastName2" class="form-control" id="lastName2" type="text" placeholder="Escriba el apellido del huésped">
+                          
+                              <div class="alert alert-danger" *ngIf="lastName2Txt.invalid && (lastName2Txt.dirty || lastName2Txt.touched)">
+                                  <div *ngIf="lastName2Txt.errors['required']" style="font-size: small; height: 5px; padding: 0px; margin: 0;">
+                                    campo obligatorio
+                                  </div>
+                              </div>
+          
+                          </div>
+                      </div>
+                      <div *ngIf="selectedGuestNumber >= '3'" class="container my-3" style="border: 1px solid lightgray; border-radius: 10px; padding: 10px;">
+                          <h6>Huésped 3</h6>
+                          <div class="my-3">
+                              <label class="form-label">Nombre:</label>
+                              <input required #name3Txt="ngModel" [(ngModel)]="guest3.name" name="name3" class="form-control" id="name3" type="text" placeholder="Escriba el nombre del huésped">
+                              
+                              <div class="alert alert-danger" *ngIf="name3Txt.invalid && (name3Txt.dirty || name3Txt.touched)">
+                                  <div *ngIf="name3Txt.errors['required']" style="font-size: small; height: 5px; padding: 0px; margin: 0;">
+                                    campo obligatorio
+                                  </div>
+                              </div>
+          
+                              <label class="form-label mt-2">Apellido:</label>
+                              <input required #lastName3Txt="ngModel" [(ngModel)]="guest3.lastName" name="lastName3" class="form-control" id="lastName3" type="text" placeholder="Escriba el apellido del huésped">
+                          
+                              <div class="alert alert-danger" *ngIf="lastName3Txt.invalid && (lastName3Txt.dirty || lastName3Txt.touched)">
+                                  <div *ngIf="lastName3Txt.errors['required']" style="font-size: small; height: 5px; padding: 0px; margin: 0;">
+                                    campo obligatorio
+                                  </div>
+                              </div>
+                          
+                          </div>
+                      </div>
+                      <div *ngIf="selectedGuestNumber >= '4'" class="container my-3" style="border: 1px solid lightgray; border-radius: 10px; padding: 10px;">
+                          <h6>Huésped 4</h6>
+                          <div class="my-3">
+                              <label class="form-label">Nombre:</label>
+                              <input required #name4Txt="ngModel" [(ngModel)]="guest4.name" name="name4" class="form-control" id="name4" type="text" placeholder="Escriba el nombre del huésped">
+                          
+                              <div class="alert alert-danger" *ngIf="name4Txt.invalid && (name4Txt.dirty || name4Txt.touched)">
+                                  <div *ngIf="name4Txt.errors['required']" style="font-size: small; height: 5px; padding: 0px; margin: 0;">
+                                    campo obligatorio
+                                  </div>
+                              </div>
+          
+                              <label class="form-label mt-2">Apellido:</label>
+                              <input required #lastName4Txt="ngModel" [(ngModel)]="guest4.lastName" name="lastName4" class="form-control" id="lastName4" type="text" placeholder="Escriba el apellido del huésped">
+                          
+                              <div class="alert alert-danger" *ngIf="lastName4Txt.invalid && (lastName4Txt.dirty || lastName4Txt.touched)">
+                                  <div *ngIf="lastName4Txt.errors['required']" style="font-size: small; height: 5px; padding: 0px; margin: 0;">
+                                    campo obligatorio
+                                  </div>
+                              </div>
+                          
+                          </div>
+                      </div>
+
+                      <div class="mb-3">
+                        <h5>Total: </h5> <span> ${{total}}</span>
+                    </div>
+                    </form>
+        
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                  <button type="button" (click)="updateReservation()" class="btn btn-primary">Actualizar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+    </div>
+</div>

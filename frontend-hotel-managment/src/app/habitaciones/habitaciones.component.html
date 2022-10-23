@@ -1,0 +1,190 @@
+<div class="container-fluid px-0">
+  <div class="img" style="min-width: 100%; max-height: 50vh">
+    <img
+      class="img-fluid"
+      style="
+        max-height: 50vh;
+        min-width: 100%;
+        object-fit: cover;
+        object-position: 100% 50%;
+      "
+      src="../assets/Images/portada.jpg"
+    />
+  </div>
+  <div class="container">
+    <div
+      class="row"
+      style="
+        margin-left: 5%;
+        margin-right: 5%;
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+      "
+    >
+      <h1 style="margin-top: 2%">Brisa Marina Categorias de habitaciones</h1>
+      <h3 style="margin-top: 2%">Relájate en nuestro hotel</h3>
+      <p>
+        Después de un día de sol, arena y surf, las habitaciones de hotel en
+        Brisa Marina son el oasis perfecto frente al mar. Como un hotel cálido y
+        familiar ubicado a pasos de la playa, ofrecemos el escenario perfecto
+        para relajante y recarga.
+      </p>
+
+      <p>
+        Con una decoración playera pero elegante a la vez, las hermosas
+        habitaciones de Brisa Marina te dejarán con la boca abierta. Ya sea que
+        tengan vista a nuestros preciosos jardines o a la imponente bahía, todas
+        te ofrecerán el servicio de lujo que te mereces al contar con aire
+        acondicionado, televisiones de pantalla plana y baños privados con
+        ducha.
+      </p>
+
+      <p>
+        Ya sea que estés planeando unas vacaciones familiares, una escapada
+        romántica en pareja o unas emocionantes vacaciones en la playa con
+        amigos, Brisa Marina es la mejor opción entre los hoteles todo incluido del
+        pais.
+      </p>
+      
+    </div>
+
+    <div class="container-fluid">
+      <div class="row mx-auto" style="margin-top: 2%">
+        
+        
+        <div *ngFor="let room of rooms; index as i" class="col-md-6 container-fluid d-flex flex-column min-vh-50" style="margin-top: 5%">
+
+          <!-- Room's images -->
+          <img *ngIf="i == 0" class="img-fluid rounded mx-auto d-block" src="../assets/Images/Estandar.jpg"/>
+          <img *ngIf="i == 1" class="img-fluid rounded mx-auto d-block" src="../assets/Images/terraza.jpg"/>
+          <img *ngIf="i == 2" class="img-fluid rounded mx-auto d-block" src="../assets/Images/vista al mar.jpg"/>
+          <img *ngIf="i == 3" class="img-fluid rounded mx-auto d-block" src="../assets/Images/frente al mar.jpg"/>
+
+          <div class="container">
+            <h3 class="text-center" style="margin-top: 2%; font-size: 20px"> {{room.roomType}} </h3>
+            <p class="text-center mx-auto d-block" style="font-size: 15px; width: 80%">{{room.description}}</p>
+          </div>
+          <footer class="footer mt-auto py-3">
+            <div class="text-center">
+              <p>Desde ${{room.price}}</p> 
+              <!--  
+              <a class="btn btn-resGreen">Reservar Ahora</a>
+            -->
+            </div>
+          </footer>
+
+        </div>
+
+
+        <!--
+        <div class="col-md-6 container-fluid d-flex flex-column min-vh-50" style="margin-top: 5%">
+          
+          <img class="img-fluid rounded mx-auto d-block" src="../assets/Images/Estandar.jpg"/>
+          <div class="container">
+            <h3 class="text-center" style="margin-top: 2%; font-size: 20px">Habitación Estándar</h3>
+            <p
+              class="text-center mx-auto d-block"
+              style="font-size: 15px; width: 80%">
+              Las habitaciones Estándar estan disponibles en dos camas
+              matrimoniales o cama king size.
+            </p>
+            <br />
+          </div>
+          <footer class="footer mt-auto py-3">
+            <div class="text-center">
+              <p>Desde $precio$</p>
+              <a class="btn btn-resGreen">Reservar Ahora</a>
+            </div>
+          </footer>
+
+        </div>
+
+
+        <div
+          class="col-md-6 container-fluid d-flex flex-column min-vh-50"
+          style="margin-top: 5%"
+        >
+          <img
+            class="img-fluid rounded mx-auto d-block"
+            src="../assets/Images/terraza.jpg"
+          />
+          <div class="container">
+            <h3 class="text-center" style="margin-top: 2%; font-size: 20px">
+              Habitación con terraza
+            </h3>
+            <p
+              class="text-center mx-auto d-block"
+              style="font-size: 15px; width: 80%"
+            >
+              Las habitaciones Estándar con terraza estan disponibles en dos
+              camas matrimoniales o cama king size.
+            </p>
+            <br />
+          </div>
+          <footer class="footer mt-auto py-3">
+            <div class="text-center">
+              <p>Desde $precio$</p>
+              <a class="btn btn-resGreen">Reservar Ahora</a>
+            </div>
+          </footer>
+        </div>
+
+        <div
+          class="col-md-6 container-fluid d-flex flex-column min-vh-50"
+          style="margin-top: 5%"
+        >
+          <img
+            class="img-fluid rounded mx-auto d-block"
+            src="../assets/Images/vista al mar.jpg"
+          />
+          <div class="container-fluid">
+            <h3 class="text-center" style="margin-top: 2%; font-size: 20px">
+              Habitación Vista al Mar
+            </h3>
+            <p
+              class="text-center mx-auto d-block"
+              style="font-size: 15px; width: 80%"
+            >
+              Las habitaciones Vista al Mar estan disponibles en dos camas
+              matrimoniales o cama king size, cuenta con terraza.
+            </p>
+          </div>
+          <footer class="footer mt-auto py-3">
+            <div class="text-center">
+              <p>Desde $precio$</p>
+              <a class="btn btn-resGreen">Reservar Ahora</a>
+            </div>
+          </footer>
+        </div>
+
+        <div
+          class="col-md-6 container-fluid d-flex flex-column min-vh-50"
+          style="margin-top: 5%"
+        >
+          <img
+            class="img-fluid rounded mx-auto d-block"
+            src="../assets/Images/frente al mar.jpg"
+          />
+          <div class="container-fluid">
+            <h3 class="text-center" style="margin-top: 2%; font-size: 20px">
+              Habitación Frente al Mar
+            </h3>
+            <p
+              class="text-center mx-auto d-block"
+              style="font-size: 15px; width: 80%"
+            >
+              Las habitaciones Frente al Mar son ideales para pareja,
+              disponibles unicamente con cama king size.
+            </p>
+          </div>
+          <footer class="footer mt-auto py-3">
+            <div class="text-center">
+              <p>Desde $precio$</p>
+              <a class="btn btn-resGreen">Reservar Ahora</a>
+            </div>
+          </footer>
+        </div>
+      -->
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,86 @@
+<div
+  class="bg-image"
+  style="
+    background-image: url('../../assets/Images/playa.jpg');
+    background-size: cover;
+  "
+>
+  <div class="d-flex align-items-center my-5" style="height: 100vh">
+    <div
+      class="container-fluid border rounded pt-5 pb-5"
+      style="background-color: white; width: 45vh;"
+    >
+      <h3 class="text-center mb-3">Registro</h3>
+      <div
+        class="container-fluid d-flex align-items-center mt-3"
+        style="height: 74%"
+      >
+        <form class="mx-auto" #signupform="ngForm">
+
+          <div class="mb-3">
+            <label class="form-label">Nombre</label>
+            <input [(ngModel)]="user.name" name="name" id="name" type="text" class="form-control" required #nameTxt="ngModel">
+            <div class="alert alert-danger" *ngIf="nameTxt.invalid && (nameTxt.dirty || nameTxt.touched)">
+              <div *ngIf="nameTxt.errors['required']" style="font-size: small; height: 5px; padding: 0px; margin: 0;">
+                campo obligatorio
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Apellido</label>
+            <input [(ngModel)]="user.lastName" name="lastName" type="text" class="form-control" required #lastNameTxt="ngModel">
+            <div class="alert alert-danger" *ngIf="lastNameTxt.invalid && (lastNameTxt.dirty || lastNameTxt.touched)">
+              <div *ngIf="lastNameTxt.errors['required']" style="font-size: small; height: 5px; padding: 0px; margin: 0;">
+                campo obligatorio
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Dirección</label>
+            <input [(ngModel)]="user.address" name="address" type="text" class="form-control" required #addressTxt="ngModel">
+            <div class="alert alert-danger" *ngIf="addressTxt.invalid && (addressTxt.dirty || addressTxt.touched)">
+              <div *ngIf="addressTxt.errors['required']" style="font-size: small; height: 5px; padding: 0px; margin: 0;">
+                campo obligatorio
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label mb-3">Redes</label><br>
+            
+            <div *ngFor="let socialNetwork of socialNetworks; index as i" class="form-check form-check-inline">
+              <input #socialNetworkCheckBox (change)="stateChanged(socialNetworkCheckBox)" class="form-check-input" type="checkbox" id="inlineCheckbox{{i}}" [value]="socialNetwork.socialNetwork">
+              <label class="form-check-label" for="inlineCheckbox{{i}}">{{socialNetwork.socialNetwork}}</label>
+            </div>
+
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Correo</label>
+            <input [(ngModel)]="user.email" name="email" type="email" class="form-control" required #emailTxt="ngModel">
+            <div class="alert alert-danger" *ngIf="emailTxt.invalid && (emailTxt.dirty || emailTxt.touched)">
+              <div *ngIf="emailTxt.errors['required']" style="font-size: small; height: 5px; padding: 0px; margin: 0;">
+                campo obligatorio
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Contraseña</label>
+            <input [(ngModel)]="user.password" name="password" type="password" class="form-control" required #passwordTxt="ngModel">
+            <div class="alert alert-danger" *ngIf="passwordTxt.invalid && (passwordTxt.dirty || passwordTxt.touched)">
+              <div *ngIf="passwordTxt.errors['required']" style="font-size: small; height: 5px; padding: 0px; margin: 0;">
+                campo obligatorio
+              </div>
+            </div>
+          </div>
+
+          <button [disabled]="!signupform.form.valid" (click)="addUser()" type="submit" class="btn btn-primary mx-auto d-block">Registrarse</button>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

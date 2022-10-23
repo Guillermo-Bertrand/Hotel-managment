@@ -1,0 +1,60 @@
+<div class="container">
+    <section class="newsletter-subscribe py-4 py-xl-5">
+        <div class="container">
+            <div class="row mb-2">
+                <div class="col-md-8 col-xl-6 text-center mx-auto">
+                    <h2 class="display-6 fw-bold">Cancelación de una reserva</h2>
+                    <p class="text-muted">A continuación te pediremos que ingreses tu número de folio, este mismo se encuentra en tu ticket, se desplegarán los datos de tu reserva y se adjuntará el dinero reembolsado.</p>
+                </div>
+            </div>
+            <form class="d-flex justify-content-center flex-wrap" method="post">
+                <div class="mb-3">
+                    <input [(ngModel)]="id" class="form-control" type="text" name="id" placeholder="Ingresa el folio de la reservación" style="width: 257px;">
+                </div>
+                <div class="mb-3">
+                    <button (click)="loadReservation()" class="btn btn-primary ms-2" id="btnBuscar" type="submit" style="background: #a9c22f;">Buscar</button>
+                </div>
+            </form>
+        </div>
+    </section>
+    <div id="div_datos" class="container">
+        <form>
+            <section id="secDatosReserva" class="position-relative"><h4 class="headertekst">Datos de la reserva</h4>
+                <div class="container position-relative">
+                    <div class="row">
+                        <div class="col">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead style="text-align: center;">
+                                        <tr>
+                                            <th>Número de folio</th>
+                                            <th>Fecha de ingreso</th>
+                                            <th>Fecha de salida</th>
+                                            <th>Fecha de cancelación</th>
+                                            <th>Costo</th>
+                                            <th>Devolución</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr style="text-align: center;">
+                                            <td *ngIf="reservation != null">{{idAux}}</td>
+                                            <td *ngIf="reservation != null">{{reservation.checkIn | date: "dd/MM/yyyy"}}</td>
+                                            <td *ngIf="reservation != null">{{reservation.checkOut | date: "dd/MM/yyyy"}}</td>
+                                            <td *ngIf="reservation != null">{{cancellation.date | date: "dd/MM/yyyy"}}</td>
+                                            <td *ngIf="reservation != null">${{reservation.price}}</td>
+                                            <td *ngIf="reservation != null">${{refund}}</td>
+                                        </tr>
+                                        <tr></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </form>
+    </div>
+    <div class="d-grid gap-2 col-6 mx-auto mb-3">
+        <button *ngIf="reservationLooked" (click)="addCancellation()" class="btn btn-danger mt-3" id="btnCancelarReserva" type="button">Cancelar reserva</button>
+    </div>
+</div>

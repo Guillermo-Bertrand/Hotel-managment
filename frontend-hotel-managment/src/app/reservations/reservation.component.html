@@ -1,0 +1,218 @@
+<div class="container bg-light bg-gradient shadow styled-container">
+    <!--
+    <div class="col offset-xxl-0">
+        <picture><img src="https://media.staticontent.com/media/pictures/2fa5cdf8-c992-4704-8064-15a3e3c768bd" style="height: 442px;width: 765.984px;margin: 45px;padding: 0px;transform: translateY(221px);" width="800" height="623"></picture>
+    </div>
+    -->
+    <div>
+        <form #reservationform="ngForm">
+            <h4 class="text-center">Ingrese los datos requeridos</h4>
+            <p class="text-center text-muted">Estos datos serán utilizados para generar su reservación, por favor, ingrese de manera correcta lo solicitado.&nbsp;</p>
+
+            <div class="mb-3">
+                <label class="form-label">Tipo de habitación:</label>
+                <select (change)="showPrice()" [(ngModel)]="selectedRoomType" name="selectedRoomType" class="form-select" id="selectRoomType">
+                    <option *ngFor="let room of roomTypes; index as i">{{room.roomType}}</option>
+                </select></div>
+
+                <img *ngIf="selectedRoomType == 'Habitación estándar'" class="img-fluid rounded mx-auto d-block" src="../assets/Images/Estandar.jpg"/>
+                <img *ngIf="selectedRoomType == 'Habitación estándar con terraza'" class="img-fluid rounded mx-auto d-block" src="../assets/Images/terraza.jpg"/>
+                <img *ngIf="selectedRoomType == 'Habitación vista al mar'" class="img-fluid rounded mx-auto d-block" src="../assets/Images/vista al mar.jpg"/>
+                <img *ngIf="selectedRoomType == 'Habitación frente al mar'" class="img-fluid rounded mx-auto d-block" src="../assets/Images/frente al mar.jpg"/>
+
+            <div class="mb-3">
+                <label class="form-label" for="email">Tipo de cama(s):</label>
+                <select (change)="changeBedType()" [(ngModel)]="selectedBedType" class="form-select" name="selectedBedType" id="selectBedType">
+                    <option *ngIf="selectedRoomType != 'Habitación frente al mar'">{{bedTypes[0].type}}</option>
+                    <option>{{bedTypes[1].type}}</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <h6 style="display: inline;">Precio: </h6> <span> ${{price}}</span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Fecha de ingreso:</label>
+                <input (change)="calDays()" [(ngModel)]="checkIn" name="checkIn" class="form-control" id="checkIn" type="date">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Fecha de salida:</label>
+                <input (change)="calDays()" [(ngModel)]="checkOut" name="checkOut" class="form-control" id="checkOut" type="date">
+            </div>
+
+            <hr class="my-4">
+
+            <div class="mb-3">
+                <label class="form-label" for="email">Número de huéspedes:</label>
+                <select [(ngModel)]="selectedGuestNumber" class="form-select" name="selectedGuestNumber" id="selectBedType">
+                    <option>1</option>
+                    <option>2</option>
+                    <option *ngIf="selectedBedType != 'King size'">3</option>
+                    <option *ngIf="selectedBedType != 'King size'">4</option>
+                </select>
+            </div>
+
+            <div *ngIf="selectedGuestNumber >= '1'" class="container my-3" style="border: 1px solid lightgray; border-radius: 10px; padding: 10px;">
+                <h6>Huésped 1</h6>
+                <div class="my-3">
+                    <label class="form-label">Nombre:</label>
+                    <input required #name1Txt="ngModel" [(ngModel)]="guest1.name" name="name1" class="form-control" id="name1" type="text" placeholder="Escriba el nombre del huésped">
+                    
+                    <div class="alert alert-danger" *ngIf="name1Txt.invalid && (name1Txt.dirty || name1Txt.touched)">
+                        <div *ngIf="name1Txt.errors['required']" style="font-size: small; height: 5px; padding: 0px; margin: 0;">
+                          campo obligatorio
+                        </div>
+                    </div>
+
+                    <label class="form-label mt-2">Apellido:</label>
+                    <input required #lastName1Txt="ngModel" [(ngModel)]="guest1.lastName" name="lastName1" class="form-control" id="lastName1" type="text" placeholder="Escriba el apellido del huésped">
+               
+                    <div class="alert alert-danger" *ngIf="lastName1Txt.invalid && (lastName1Txt.dirty || lastName1Txt.touched)">
+                        <div *ngIf="lastName1Txt.errors['required']" style="font-size: small; height: 5px; padding: 0px; margin: 0;">
+                          campo obligatorio
+                        </div>
+                    </div>
+               
+                </div>
+            </div>
+            <div *ngIf="selectedGuestNumber >= '2'" class="container my-3" style="border: 1px solid lightgray; border-radius: 10px; padding: 10px;">
+                <h6>Huésped 2</h6>
+                <div class="my-3">
+                    <label class="form-label">Nombre:</label>
+                    <input required #name2Txt="ngModel" [(ngModel)]="guest2.name" name="name2" class="form-control" type="text" placeholder="Escriba el nombre del huésped">
+                    
+                    <div class="alert alert-danger" *ngIf="name2Txt.invalid && (name2Txt.dirty || name2Txt.touched)">
+                        <div *ngIf="name2Txt.errors['required']" style="font-size: small; height: 5px; padding: 0px; margin: 0;">
+                          campo obligatorio
+                        </div>
+                    </div>
+
+                    <label class="form-label mt-2">Apellido:</label>
+                    <input required #lastName2Txt="ngModel" [(ngModel)]="guest2.lastName" name="lastName2" class="form-control" id="lastName2" type="text" placeholder="Escriba el apellido del huésped">
+                
+                    <div class="alert alert-danger" *ngIf="lastName2Txt.invalid && (lastName2Txt.dirty || lastName2Txt.touched)">
+                        <div *ngIf="lastName2Txt.errors['required']" style="font-size: small; height: 5px; padding: 0px; margin: 0;">
+                          campo obligatorio
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div *ngIf="selectedGuestNumber >= '3'" class="container my-3" style="border: 1px solid lightgray; border-radius: 10px; padding: 10px;">
+                <h6>Huésped 3</h6>
+                <div class="my-3">
+                    <label class="form-label">Nombre:</label>
+                    <input required #name3Txt="ngModel" [(ngModel)]="guest3.name" name="name3" class="form-control" id="name3" type="text" placeholder="Escriba el nombre del huésped">
+                    
+                    <div class="alert alert-danger" *ngIf="name3Txt.invalid && (name3Txt.dirty || name3Txt.touched)">
+                        <div *ngIf="name3Txt.errors['required']" style="font-size: small; height: 5px; padding: 0px; margin: 0;">
+                          campo obligatorio
+                        </div>
+                    </div>
+
+                    <label class="form-label mt-2">Apellido:</label>
+                    <input required #lastName3Txt="ngModel" [(ngModel)]="guest3.lastName" name="lastName3" class="form-control" id="lastName3" type="text" placeholder="Escriba el apellido del huésped">
+                
+                    <div class="alert alert-danger" *ngIf="lastName3Txt.invalid && (lastName3Txt.dirty || lastName3Txt.touched)">
+                        <div *ngIf="lastName3Txt.errors['required']" style="font-size: small; height: 5px; padding: 0px; margin: 0;">
+                          campo obligatorio
+                        </div>
+                    </div>
+                
+                </div>
+            </div>
+            <div *ngIf="selectedGuestNumber >= '4'" class="container my-3" style="border: 1px solid lightgray; border-radius: 10px; padding: 10px;">
+                <h6>Huésped 4</h6>
+                <div class="my-3">
+                    <label class="form-label">Nombre:</label>
+                    <input required #name4Txt="ngModel" [(ngModel)]="guest4.name" name="name4" class="form-control" id="name4" type="text" placeholder="Escriba el nombre del huésped">
+                
+                    <div class="alert alert-danger" *ngIf="name4Txt.invalid && (name4Txt.dirty || name4Txt.touched)">
+                        <div *ngIf="name4Txt.errors['required']" style="font-size: small; height: 5px; padding: 0px; margin: 0;">
+                          campo obligatorio
+                        </div>
+                    </div>
+
+                    <label class="form-label mt-2">Apellido:</label>
+                    <input required #lastName4Txt="ngModel" [(ngModel)]="guest4.lastName" name="lastName4" class="form-control" id="lastName4" type="text" placeholder="Escriba el apellido del huésped">
+                
+                    <div class="alert alert-danger" *ngIf="lastName4Txt.invalid && (lastName4Txt.dirty || lastName4Txt.touched)">
+                        <div *ngIf="lastName4Txt.errors['required']" style="font-size: small; height: 5px; padding: 0px; margin: 0;">
+                          campo obligatorio
+                        </div>
+                    </div>
+                
+                </div>
+            </div>
+
+            <hr class="my-4">
+
+            <div class="mb-3">
+                <label class="form-label">Tipo de pago:</label>
+                <select [(ngModel)]="selectedPaymentMethod" name="selectedPaymentMethod" class="form-select" id="paymentMethod">
+                    <option *ngFor="let paymentMethod of paymentMethods">{{paymentMethod.payment}}</option>
+                </select>
+            </div>
+
+            <div *ngIf="selectedPaymentMethod == 'Tarjeta'" class="container card-container">
+
+                <div class="row">
+
+                    <div class="col-xl">
+                        <div class="bank-card">
+                            
+                            <div class="row" style="padding: 70px 50px 0 50px">
+
+                                <div class="row">
+                                    <label class="form-label label-bank-card">Numero de tarjeta</label>
+                                    <input [(ngModel)]="cardNumber" name="cardNumber" class="form-control field-bank-card" id="cardNumber" type="text" disabled>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <label class="form-label label-bank-card">Nombre</label>
+                                        <input [(ngModel)]="hostName" name="hostName" class="form-control field-bank-card" id="hostName" type="text" disabled>
+                                    </div>
+                                    <div class="col">
+                                        <label class="form-label label-bank-card">Expiration</label>
+                                        <input [(ngModel)]="expirationDate" name="expirationDate" class="form-control field-bank-card" id="expirationDate" type="text">
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="col-xl">
+                        <label class="form-label">Nombre</label>
+                        <input [(ngModel)]="hostName" name="hostName" class="form-control" id="hostName" type="text">
+                        <label class="form-label">Numero de tarjeta</label>
+                        <input [(ngModel)]="cardNumber" name="cardNumber" class="form-control" id="cardNumber" type="text">
+                        <div class="row">
+                            <div class="col">
+                                <label class="form-label">Expiración (mm/yy)</label>
+                                <input [(ngModel)]="expirationDate" name="expirationDate" class="form-control" id="expirationDate" type="text">
+                            </div>
+                            <div class="col">
+                                <label class="form-label">CVV</label>
+                                <input [(ngModel)]="cvv" name="cvv" class="form-control" id="cvv" type="text">
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="mb-3">
+                <h5>Total: </h5> <span> ${{total}}</span>
+            </div>
+
+            <div class="d-grid gap-2 col-6 mx-auto">
+                <button [disabled]="!reservationform.form.valid"  (click)="AddReservation()" class="btn btn-primary mb-3" id="btnCancelarReserva" type="button">Realizar reservación</button>
+            </div>
+        </form>
+    </div>
+</div>
